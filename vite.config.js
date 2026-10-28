@@ -12,6 +12,26 @@ const legacyRoutes = {
 
 export default defineConfig({
   base,
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            // Keep Three's shared primitives and WebGL renderer independently
+            // cacheable, without pulling either into the initial page bundle.
+            {
+              name: "three-core",
+              test: /node_modules[\\/]three[\\/]build[\\/]three\.core\.js$/,
+            },
+            {
+              name: "three-renderer",
+              test: /node_modules[\\/]three[\\/]build[\\/]three\.module\.js$/,
+            },
+          ],
+        },
+      },
+    },
+  },
   plugins: [
     {
       name: "preserve-legacy-page-links",
